@@ -3,9 +3,28 @@ on:
   release:
     types: [published]
 jobs:
+  dirs:
+    name: Get docker dirs
+    runs-on: ubuntu-latest
+    outputs:
+      docker-dirs: ${{ steps.get-directory-names.outputs.directory-names }}
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Collect Directory Names by File
+        id: get-directory-names
+        uses: featherweight-design/collect-directory-names-by-file-glob@v1.2.2
+        with:
+          file-glob: "**/Dockerfile"
+          search-directory: "/images"
+          unique: "true"
   push_to_registry:
     name: Push Docker image to GitHub Packages
     runs-on: ubuntu-latest
+    needs: dirs
+    strategy:
+      matrix:
+        dir: ${{ fromJSON(needs.dirs.outputs.docker-dirs) }}
     permissions:
       packages: write
       contents: read
@@ -28,12 +47,13 @@ jobs:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      - name: Build polarproxy container image
+      - name: Build ${{matrix.dir}} container image
         uses: docker/build-push-action@v2
+        if: steps.changes.outputs.src == 'true'
         with:
-          context: ./polarproxy/
+          context: ./images/${{matrix.dir}}/
           push: true
           tags: |
-            docker.io/spovedio/polarproxy:${{ steps.short-sha.outputs.sha }}
-            docker.io/spovedio/polarproxy:${{ steps.branch_name.outputs.SOURCE_TAG }}
-            docker.io/spovedio/polarproxy:latest
+            docker.io/spovedio/${{matrix.dir}}:${{ steps.short-sha.outputs.sha }}
+            docker.io/spovedio/${{matrix.dir}}:${{ steps.branch_name.outputs.SOURCE_TAG }}
+            docker.io/spovedio/${{matrix.dir}}:latest
