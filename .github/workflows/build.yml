@@ -19,8 +19,8 @@ jobs:
       # - name: Use Directory Names
       #   run: echo "Directory Names are ${{ steps.get-directory-names.outputs.directory-names }} "
 
-  push_to_registry:
-    name: Push Docker image to GitHub Packages
+  build_image:
+    name: Test Build Docker image
     runs-on: ubuntu-latest
     strategy:
       fail-fast: true
