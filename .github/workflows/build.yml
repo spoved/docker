@@ -10,8 +10,8 @@ jobs:
       - name: Check out the repo
         uses: actions/checkout@v2
       - name: Get directory names
-        id: get-directory-names
-        uses: actions/collect-directory-names-by-file-glob@v1.1
+      - name: Collect Directory Names by File
+        uses: featherweight-design/collect-directory-names-by-file-glob@v1.2.2
         with:
           file-glob: "**/Dockerfile"
           search-directory: "/images"
