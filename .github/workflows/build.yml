@@ -1,4 +1,4 @@
-name: Publish Docker image
+name: Test Docker image
 on: [push]
 jobs:
   push_to_registry:
@@ -32,7 +32,4 @@ jobs:
         with:
           context: ./polarproxy/
           push: false
-          tags: |
-            docker.io/spovedio/polarproxy:${{ steps.short-sha.outputs.sha }}
-            docker.io/spovedio/polarproxy:${{ steps.branch_name.outputs.SOURCE_TAG }}
-            docker.io/spovedio/polarproxy:latest
+          tags: docker.io/spovedio/polarproxy:${{ steps.short-sha.outputs.sha }}
