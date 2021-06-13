@@ -1,7 +1,7 @@
 FROM ubuntu:16.04
 
 RUN apt-get update && apt-get install -y locales && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+  && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
 ENV LANG en_US.utf8
 
 ENV php_timezone America/New_York
@@ -23,8 +23,11 @@ ENV path /:/var/www/html/www/
 ADD files/apache2/newznab.conf /etc/apache2/sites-available/newznab.conf
 RUN mkdir /var/www/newznab/
 
+RUN --mount=type=secret,id=nn_user --mount=type=secret,id=nn_pass \
+  svn co --username $(cat /run/secrets/nn_user) --password $(cat /run/secrets/nn_pass) svn://svn.newznab.com/nn/branches/nnplus /var/www/newznab/
+
 # pull NNab plus from SVN - Note you need the username and password for Svn Above
-RUN svn co --username $nn_user --password $nn_pass svn://svn.newznab.com/nn/branches/nnplus /var/www/newznab/
+# RUN svn co --username $nn_user --password $nn_pass svn://svn.newznab.com/nn/branches/nnplus /var/www/newznab/
 
 RUN chmod 777 /var/www/newznab/www/lib/smarty/templates_c && \
   chmod 777 /var/www/newznab/www/covers/movies && \
