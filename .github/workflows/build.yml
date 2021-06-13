@@ -9,7 +9,6 @@ jobs:
     steps:
       - name: Check out the repo
         uses: actions/checkout@v2
-      - name: Get directory names
       - name: Collect Directory Names by File
         id: get-directory-names
         uses: featherweight-design/collect-directory-names-by-file-glob@v1.2.2
