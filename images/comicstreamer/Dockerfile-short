@@ -1,0 +1,2 @@
+FROM kalinon/comicstreamer:base
+RUN git pull && git status
