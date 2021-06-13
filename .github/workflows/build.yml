@@ -25,7 +25,7 @@ jobs:
     strategy:
       fail-fast: true
       matrix:
-        dir: ${{ needs.dirs.outputs.docker-dirs }}
+        dir: ${{ fromJSON(needs.dirs.outputs.docker-dirs) }}
     needs: dirs
     permissions:
       packages: write
