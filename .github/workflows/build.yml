@@ -16,8 +16,8 @@ jobs:
           file-glob: "**/Dockerfile"
           search-directory: "/images"
           unique: "true"
-      - name: Use Directory Names
-        run: echo "Directory Names are ${{ steps.get-directory-names.outputs.directory-names }}
+      # - name: Use Directory Names
+      #   run: echo "Directory Names are ${{ steps.get-directory-names.outputs.directory-names }} "
 
   push_to_registry:
     name: Push Docker image to GitHub Packages
