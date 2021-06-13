@@ -56,6 +56,3 @@ jobs:
           context: ./images/${{matrix.dir}}/
           push: false
           tags: docker.io/spovedio/${{matrix.dir}}:${{ steps.short-sha.outputs.sha }}
-          secrets: |
-            "nn_user=${{ secrets.NN_USER }}"
-            "nn_pass=${{ secrets.NN_PASS }}"
