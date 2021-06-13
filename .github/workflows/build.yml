@@ -30,6 +30,6 @@ jobs:
       - name: Build polarproxy container image
         uses: docker/build-push-action@v2
         with:
-          context: ./polarproxy/
+          context: ./images/polarproxy/
           push: false
           tags: docker.io/spovedio/polarproxy:${{ steps.short-sha.outputs.sha }}
