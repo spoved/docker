@@ -1,0 +1,65 @@
+name: Test Docker image
+on: [push]
+jobs:
+  dirs:
+    name: Get docker dirs
+    runs-on: ubuntu-latest
+    outputs:
+      docker-dirs: ${{ steps.get-directory-names.outputs.directory-names }}
+    steps:
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - name: Collect Directory Names by File
+        id: get-directory-names
+        uses: featherweight-design/collect-directory-names-by-file-glob@v1.2.2
+        with:
+          file-glob: "**/Dockerfile"
+          search-directory: "/images"
+          unique: "true"
+      # - name: Use Directory Names
+      #   run: echo "Directory Names are ${{ steps.get-directory-names.outputs.directory-names }} "
+
+  build_image:
+    name: Test Build Docker image
+    runs-on: ubuntu-latest
+    needs: dirs
+    strategy:
+      fail-fast: true
+      matrix:
+        dir: ${{ fromJSON(needs.dirs.outputs.docker-dirs) }}
+    permissions:
+      packages: write
+      contents: read
+    steps:
+      - name: Branch name
+        id: branch_name
+        run: |
+          echo ::set-output name=SOURCE_NAME::${GITHUB_REF#refs/*/}
+          echo ::set-output name=SOURCE_BRANCH::${GITHUB_REF#refs/heads/}
+          echo ::set-output name=SOURCE_TAG::${GITHUB_REF#refs/tags/}
+      - uses: benjlevesque/short-sha@v1.2
+        id: short-sha
+        with:
+          length: 7
+      - name: Check out the repo
+        uses: actions/checkout@v2
+      - id: changes
+        uses: dorny/paths-filter@v2
+        with:
+          filters: |
+            src:
+              - 'images/${{matrix.dir}}/**'
+      - name: Log in to Docker Registry
+        uses: docker/login-action@v1
+        if: steps.changes.outputs.src == 'true'
+        with:
+          registry: docker.io
+          username: ${{ secrets.DOCKER_USERNAME }}
+          password: ${{ secrets.DOCKER_PASSWORD }}
+      - name: Build ${{matrix.dir}} container image
+        uses: docker/build-push-action@v2
+        if: steps.changes.outputs.src == 'true'
+        with:
+          context: ./images/${{matrix.dir}}/
+          push: false
+          tags: docker.io/spovedio/${{matrix.dir}}:${{ steps.short-sha.outputs.sha }}
