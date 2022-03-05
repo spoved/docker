@@ -5,6 +5,7 @@ RUN apt-get update && apt-get install -y \
   calibre \
   fuse \
   unzip \
+  ca-certificates \
   && apt-get clean && \
   rm -rf \
   /tmp/* \
