@@ -51,14 +51,12 @@ jobs:
               - 'images/${{matrix.dir}}/**'
       - name: Log in to Docker Registry
         uses: docker/login-action@v1
-        if: steps.changes.outputs.src == 'true'
         with:
           registry: docker.io
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build ${{matrix.dir}} container image
         uses: docker/build-push-action@v2
-        if: steps.changes.outputs.src == 'true'
         with:
           context: ./images/${{matrix.dir}}/
           push: false
