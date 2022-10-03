@@ -54,7 +54,6 @@ jobs:
           password: ${{ secrets.DOCKER_PASSWORD }}
       - name: Build and push ${{matrix.dir}} container image
         uses: docker/build-push-action@v2
-        if: steps.changes.outputs.src == 'true'
         with:
           context: ./images/${{matrix.dir}}/
           push: true
