@@ -12,7 +12,7 @@ RUN \
   # unrar-cffi dependencies
   libffi-dev=3.2.1-r6 \
   # Pillow dependencies
-  zlib-dev=1.2.11-r3 \
+  zlib-dev \
   jpeg-dev=8-r6 \
   unrar
 
