@@ -61,4 +61,11 @@ jobs:
           tags: |
             docker.io/spovedio/${{matrix.dir}}:${{ steps.short-sha.outputs.sha }}
             docker.io/spovedio/${{matrix.dir}}:${{ steps.branch_name.outputs.SOURCE_BRANCH }}
+      - name: Push latest
+        uses: docker/build-push-action@v2
+        if: steps.changes.outputs.src == 'true'
+        with:
+          context: ./images/${{matrix.dir}}/
+          push: true
+          tags: |
             docker.io/spovedio/${{matrix.dir}}:latest
