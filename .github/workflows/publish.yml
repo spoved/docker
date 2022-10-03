@@ -60,5 +60,5 @@ jobs:
           push: true
           tags: |
             docker.io/spovedio/${{matrix.dir}}:${{ steps.short-sha.outputs.sha }}
-            docker.io/spovedio/${{matrix.dir}}:${{ steps.branch_name.outputs.SOURCE_TAG }}
+            docker.io/spovedio/${{matrix.dir}}:${{ steps.branch_name.outputs.SOURCE_BRANCH }}
             docker.io/spovedio/${{matrix.dir}}:latest
