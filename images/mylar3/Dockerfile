@@ -30,6 +30,7 @@ RUN curl -O https://downloads.rclone.org/rclone-current-linux-amd64.zip && \
   chown root:root /usr/bin/rclone && \
   chmod 755 /usr/bin/rclone
 
+RUN /usr/local/bin/python -m pip install --upgrade pip
 
 # set version label
 # ARG MYLAR_COMMIT=v0.3.6
