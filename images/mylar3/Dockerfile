@@ -52,16 +52,16 @@ RUN echo "**** install requirements ****" && \
 
 # RUN sed -i 's/localbypass = False/localbypass = True/g' /app/mylar/mylar/search.py
 
-RUN addgroup -g 119 plex && \
-  adduser -S -u 113 -G plex plex && \
-  passwd -d plex && \
-  addgroup root plex && \
-  chown -R plex:plex /app/mylar
+RUN addgroup -g 568 apps && \
+  adduser -S -u 568 -G apps apps && \
+  passwd -d apps && \
+  addgroup root apps && \
+  chown -R apps:apps /app/mylar
 
 # Declare volumes needed
 VOLUME ["/config","/comics","/downloads"]
 
-# Final setup
-# USER plex
+USER apps
+
 EXPOSE 8090
 CMD ["python3", "/app/mylar/Mylar.py", "--nolaunch", "--datadir", "/config"]
